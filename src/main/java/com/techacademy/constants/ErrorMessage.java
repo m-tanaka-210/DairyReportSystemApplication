@@ -32,6 +32,14 @@ public class ErrorMessage {
                     new ArrayList<String>(Arrays.asList("deleteError", "ログイン中の従業員を削除することは出来ません")));
             // 同一日付チェック用エラーメッセージ
             put(ErrorKinds.DATECHECK_ERROR, new ArrayList<String>(Arrays.asList("reportDateError", "既に登録されている日付です")));
+
+//            // 氏名の空白チェック用エラーメッセージ
+//            put(ErrorKinds.BLANK_ERROR, new ArrayList<String>(Arrays.asList("nameError", "値を入力してください")));
+//
+//            // 氏名の20文字以下チェック用エラーメッセージ
+//            put(ErrorKinds.RANGECHECK_ERROR,
+//                    new ArrayList<String>(Arrays.asList("nameError", "20文字以下で入力してください")));
+
         }
     };
 

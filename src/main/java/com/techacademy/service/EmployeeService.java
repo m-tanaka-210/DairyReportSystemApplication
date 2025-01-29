@@ -23,6 +23,11 @@ public class EmployeeService {
     public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
+
+    }
+
+    public String encodePassword(String rawPassword) {
+        return passwordEncoder.encode(rawPassword);
     }
 
     // 従業員保存
@@ -47,6 +52,32 @@ public class EmployeeService {
         employee.setUpdatedAt(now);
 
         employeeRepository.save(employee);
+        return ErrorKinds.SUCCESS;
+    }
+
+    // 従業員更新
+    public ErrorKinds saveEmployee(Employee employee) {
+
+        // Employeeの変数に従業員番号を基に従業員のデータを取得する
+        Employee existingEmployee = findByCode(employee.getCode());
+
+        // 取得したデータの名前を引数のEmployeeの名前に置き換える
+        existingEmployee.setName(employee.getName());
+
+        // パスワードが入力されていたらパスワードも置き換える
+        if (employee.getPassword() != null && !employee.getPassword().isEmpty()) {
+            ErrorKinds result = employeePasswordCheck(employee);
+            if (result != ErrorKinds.CHECK_OK) {
+                return result;
+            }
+        existingEmployee.setPassword(encodePassword(employee.getPassword()));
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        employee.setCreatedAt(now);
+        employee.setUpdatedAt(now);
+
+        employeeRepository.save(existingEmployee);
         return ErrorKinds.SUCCESS;
     }
 
@@ -82,7 +113,9 @@ public class EmployeeService {
 
     // 従業員パスワードチェック
     private ErrorKinds employeePasswordCheck(Employee employee) {
-
+        if ("".equals(employee.getPassword())) {
+            return ErrorKinds.CHECK_OK;
+        }
         // 従業員パスワードの半角英数字チェック処理
         if (isHalfSizeCheckError(employee)) {
 

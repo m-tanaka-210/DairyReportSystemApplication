@@ -67,13 +67,10 @@ public class EmployeeController {
          */
         if ("".equals(employee.getPassword())) {
             // パスワードが空白だった場合
-            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR),
-                    ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
-
+            model.addAttribute("passwordError","値を入力してください");
             return create(employee);
 
         }
-
         // 入力チェック
         if (res.hasErrors()) {
             return create(employee);
@@ -97,6 +94,39 @@ public class EmployeeController {
 
         return "redirect:/employees";
     }
+
+    // 従業員更新画面
+    @GetMapping(value = "/{code}/edit")
+    public String edit(@PathVariable String code, Model model) {
+        model.addAttribute("employee", employeeService.findByCode(code));
+        return "employees/edit";
+    }
+
+    @PostMapping(value = "/{code}/update")
+    public String update(@Validated Employee employee, BindingResult res, Model model) {
+        if (res.hasErrors()) {
+            model.addAttribute("employee", employee);
+            return "employees/edit";
+        }
+
+        try {
+            ErrorKinds result = employeeService.saveEmployee(employee);
+
+            if (result == ErrorKinds.RANGECHECK_ERROR) {
+                model.addAttribute("passwordError", "パスワードは8文字以上16文字以下で入力してください。");
+                return "employees/edit";
+            } else if (result == ErrorKinds.HALFSIZE_ERROR) {
+                model.addAttribute("passwordError", "パスワードは半角英数字のみで入力してください。");
+                return "employees/edit";
+            }
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "更新中にエラーが発生しました。");
+            return "employees/edit";
+        }
+
+        return "redirect:/employees";
+    }
+
 
     // 従業員削除処理
     @PostMapping(value = "/{code}/delete")

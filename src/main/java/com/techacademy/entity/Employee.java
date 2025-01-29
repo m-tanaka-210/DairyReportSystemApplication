@@ -13,6 +13,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+//import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 @Data
@@ -51,7 +52,7 @@ public class Employee {
     // 権限
     @Column(columnDefinition="VARCHAR(10)", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.GENERAL;
 
     // パスワード
     @Column(length = 255, nullable = false)

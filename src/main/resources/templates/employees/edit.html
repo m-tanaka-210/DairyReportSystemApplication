@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: head_fragment(title=従業員更新)"></head>
+
+<body class="h-100 overflow-hidden">
+    <div class="row h-100">
+        <div class="h-100 p-3 mb-2 bg-dark text-white col-sm-2">
+            <nav th:replace="common/side :: copy"></nav>
+        </div>
+
+        <div class="mt-3 h-100 col-sm-10">
+            <div class="container-fluid p-0">
+                <h1>従業員 更新</h1>
+             </div>
+
+            <div class="mb-3 col-12 col-xxl-6">
+
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-header bg-light text-secondary">パスワードは変更する場合のみ入力してください</div>
+
+                        <div class="card-body mb-5">
+
+                            <form th:action="@{/employees/{code}/update(code=${employee.code})}" th:object="${employee}" method="post">
+
+                                <div class="mb-3">
+                                        <p class="w-25">社員番号</p>
+                                        <p class="align-middle" th:text="${employee.code}"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label class="form-label" for="name">氏名</label>
+                                        <input class="form-control" type="text" id="name" name="name" th:field="*{name}">
+                                        <span th:errors="*{name}" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                        <label class="form-label" for="password">パスワード</label>
+                                        <input class="form-control" type="password" id="password" name="password" th:field="*{password}">
+                                        <span th:if"${passwordError}" th:text="${passwordError}" class="text-danger"></span>
+                                </div>
+                                <div class="mb-3">
+                                        <label class="form-label" for="role">権限</label>
+                                        <select class="form-select" id="role" th:field="*{role}">
+                                            <option th:each="item:${T(com.techacademy.entity.Employee.Role).values()}" th:value="${item}" th:text="${item.getValue()}" th:selected="*{role} == ${item}">
+                                            </option>
+                                        </select>
+                                </div>
+                                <div class="mb-3">
+                                    <p class="w-25">更新日時</p>
+                                        <p class="align-middle" th:text="${#temporals.format(employee.updatedAt, 'yyyy-MM-dd hh:mm:ss')}"></p>
+                                </div>
+
+                                <div class="mt-5 row g-1">
+                                    <div class="col-auto">
+                                        <input type="submit" class="btn btn-primary" value="更新">
+                                    </div>
+                                    <div class="col-auto">
+                                        <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
+                                    </div>
+                                </div>
+                                <div class="wizard wizard-success mb-4">
+                                <span th:if="${deleteError} neq null" th:text="${deleteError}" class="text-danger"></span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
