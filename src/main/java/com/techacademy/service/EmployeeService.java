@@ -64,13 +64,16 @@ public class EmployeeService {
         // 取得したデータの名前を引数のEmployeeの名前に置き換える
         existingEmployee.setName(employee.getName());
 
+        // 権限を変更する
+        existingEmployee.setRole(employee.getRole());
+
         // パスワードが入力されていたらパスワードも置き換える
         if (employee.getPassword() != null && !employee.getPassword().isEmpty()) {
             ErrorKinds result = employeePasswordCheck(employee);
             if (result != ErrorKinds.CHECK_OK) {
                 return result;
             }
-        existingEmployee.setPassword(encodePassword(employee.getPassword()));
+        existingEmployee.setPassword(employee.getPassword());
         }
 
         LocalDateTime now = LocalDateTime.now();
