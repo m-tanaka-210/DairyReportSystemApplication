@@ -20,7 +20,7 @@ public enum ErrorKinds {
     DATECHECK_ERROR,
     // チェックOK
     CHECK_OK,
-    // 正常終了
-    SUCCESS;
+    // 終了
+    SUCCESS, NOT_FOUND_ERROR;
 
 }

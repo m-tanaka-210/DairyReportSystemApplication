@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/header :: head_fragment(title='日報登録')"></head>
+<body class="h-100 overflow-hidden">
+  <div class="row h-100">
+    <div class="h-100 p-3 mb-2 bg-dark text-white col-sm-2">
+      <nav th:replace="common/side :: copy"></nav>
+    </div>
+
+    <div class="mt-3 h-100 col-sm-10">
+      <div class="container-fluid p-0">
+        <h1 class="h3 mb-3">日報 新規登録</h1>
+
+        <div class="card">
+          <div class="card-body">
+            <form th:action="@{/reports/add}" th:object="${report}" method="post">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+              <!-- 日付 -->
+              <div class="mb-3">
+                <label class="form-label">日付</label>
+                <div class="col-md-2">
+                <input type="date" class="form-control input-date" th:field="*{reportDate}" />
+                <div class="text-danger small" th:if="${#fields.hasErrors('reportDate')}" th:errors="*{reportDate}"></div>
+                </div>
+              </div>
+
+              <!-- 氏名 -->
+              <div class="mb-3">
+                <label class="form-label">氏名</label>
+                <div class="col-md-3">
+                  <td th:text="${report.employee.name}"></td>
+                </div>
+              </div>
+
+              <!-- タイトル -->
+              <div class="mb-3">
+                <label class="form-label">タイトル</label>
+                <div class="col-md-4">
+                  <input type="text" class="form-control input-title" th:field="*{title}" maxlength="255" />
+                  <div class="text-danger small" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                </div>
+              </div>
+
+              <!-- 内容 -->
+              <div class="mb-3">
+                <label class="form-label">内容</label>
+                <div class="col-md-6">
+                  <textarea class="form-control input-text" th:field="*{content}"　rows="8"></textarea>
+                  <div class="text-danger small" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                </div>
+              </div>
+
+              <div class="mt-5 row g-1">
+                <div class="col-auto">
+                    <input type="submit" class="btn btn-primary" value="登録">
+                </div>
+                <div class="col-auto">
+                    <a th:href="@{/reports}" class="btn btn-primary">戻る</a>
+                </div>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

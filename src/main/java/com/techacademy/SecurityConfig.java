@@ -21,7 +21,16 @@ public class SecurityConfig {
         ).logout(logout -> logout.logoutSuccessUrl("/login") // ログアウト後のリダイレクト先
         ).authorizeHttpRequests(
                 auth -> auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // css等は未ログインでアクセス可
-                        .requestMatchers("/employees/**").hasAnyAuthority("ADMIN").anyRequest().authenticated()); // その他はログイン必要
+        .requestMatchers("/employees/**").hasAnyAuthority("ADMIN") // 従業員一覧は管理者のみ
+        .anyRequest().authenticated()                              // /reports を含むその他は「要ログイン」
+        )
+        // 未認証→ログイン画面 / 権限不足→403ページ
+        .exceptionHandling(ex -> ex
+        .authenticationEntryPoint(
+        new org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint("/login")
+        )
+        .accessDeniedPage("/403")
+        );
 
         return http.build();
     }
