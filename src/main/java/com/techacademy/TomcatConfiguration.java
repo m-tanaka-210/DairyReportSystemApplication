@@ -1,4 +1,4 @@
-package com.techacademy; // ご自身の環境に合わせてください
+package com.techacademy;
 
 import org.apache.catalina.connector.Connector;
 import org.apache.coyote.ajp.AjpNio2Protocol;

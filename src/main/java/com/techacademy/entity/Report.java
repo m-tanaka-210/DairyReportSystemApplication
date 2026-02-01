@@ -31,7 +31,7 @@ public class Report {
     // タイトル（最大100）
     @NotBlank
     @Length(max = 100)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, length = 100)
     private String title;
 
     // 内容（長文　最大600）
