@@ -116,9 +116,6 @@ public class EmployeeService {
 
     // 従業員パスワードチェック
     private ErrorKinds employeePasswordCheck(Employee employee) {
-        if ("".equals(employee.getPassword())) {
-            return ErrorKinds.CHECK_OK;
-        }
         // 従業員パスワードの半角英数字チェック処理
         if (isHalfSizeCheckError(employee)) {
 

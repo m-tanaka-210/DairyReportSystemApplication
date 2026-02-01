@@ -15,15 +15,20 @@ import com.techacademy.entity.Report;
 import com.techacademy.service.EmployeeService;
 import com.techacademy.service.ReportService;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 @RequestMapping("/reports")
-@RequiredArgsConstructor
 public class ReportController {
 
     private final ReportService reportService;
     private final EmployeeService employeeService;
+
+    @Autowired
+    public ReportController(ReportService reportService, EmployeeService employeeService) {
+        this.reportService = reportService;
+        this.employeeService = employeeService;
+    }
 
     // ログイン中の従業員エンティティを取得
     private Employee loginEmployee(Principal principal) {
@@ -66,7 +71,6 @@ public class ReportController {
     // 日報新規登録処理
     @PostMapping(value = "/add")
     public String add(@Validated @ModelAttribute Report report, BindingResult res, Principal principal) {
-        // 権限チェックト
         Employee me = loginEmployee(principal);
         report.setEmployee(me);
 
@@ -130,9 +134,6 @@ public class ReportController {
             return "reports/edit";
         }
 
-        if (!isAdmin(me) && !r.getEmployee().getCode().equals(me.getCode())) {
-            return "redirect:/reports";
-        }
         r.setReportDate(form.getReportDate());
         r.setTitle(form.getTitle());
         r.setContent(form.getContent());
@@ -151,14 +152,6 @@ public class ReportController {
             }
         }
         return "redirect:/reports";
-    }
-
-    @Controller
-    public class ErrorPageController {
-        @GetMapping("/403")
-        public String forbidden() {
-            return "403";
-        }
     }
 
 }
